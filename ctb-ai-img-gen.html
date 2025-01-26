@@ -9,15 +9,20 @@
         body {
             background-color: #0f0f11;
             margin: 0;
-            height: 100%;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* Style the iframe container */
-        .iframe-container {
-            text-align: center;
+        /* Style the iframe */
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none; /* Remove iframe border */
         }
     </style>
 </head>
@@ -25,9 +30,6 @@
     <div class="iframe-container">
         <iframe
             src="https://andresampa-ctb-ai-img-gen-python.hf.space"
-            frameborder="0"
-            width="1200"
-            height="750"
         ></iframe>
     </div>
 </body>
