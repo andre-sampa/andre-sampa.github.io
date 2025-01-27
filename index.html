@@ -1,3 +1,64 @@
-Hello World
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directory Listing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 5px 0;
+        }
+        a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Directory Listing</h1>
+    <ul id="directory-list"></ul>
 
-Andre's web repository
+    <script>
+        // Function to fetch and list directories
+        async function listDirectories() {
+            try {
+                const response = await fetch('./'); // Fetch the current directory
+                const text = await response.text();
+                const parser = new DOMParser();
+                const htmlDoc = parser.parseFromString(text, 'text/html');
+                const links = htmlDoc.querySelectorAll('a');
+
+                const directoryList = document.getElementById('directory-list');
+
+                links.forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (href.endsWith('/') && href !== '../') { // Filter out directories
+                        const li = document.createElement('li');
+                        const a = document.createElement('a');
+                        a.href = href;
+                        a.textContent = href;
+                        li.appendChild(a);
+                        directoryList.appendChild(li);
+                    }
+                });
+            } catch (error) {
+                console.error('Error fetching directories:', error);
+            }
+        }
+
+        // Call the function to list directories when the page loads
+        listDirectories();
+    </script>
+</body>
+</html>
