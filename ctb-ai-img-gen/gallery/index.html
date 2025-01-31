@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flux Model Vol Image Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        .gallery img {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .gallery img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <h1>Flux Model Vol Image Gallery</h1>
+    <div class="gallery" id="gallery"></div>
+
+    <script>
+        // Base URL of your folder
+        const baseUrl = "https://modal.com/storage/andrefranceschini/main/flux-model-vol/images/";
+
+        // Function to fetch the list of images from the folder
+        async function fetchImages() {
+            try {
+                // Fetch the folder's directory listing
+                const response = await fetch(baseUrl);
+                const text = await response.text();
+
+                // Parse the HTML response to extract image filenames
+                const parser = new DOMParser();
+                const htmlDoc = parser.parseFromString(text, 'text/html');
+                const links = htmlDoc.querySelectorAll('a');
+
+                // Filter out only .png files
+                const imageFiles = Array.from(links)
+                    .map(link => link.href)
+                    .filter(href => href.endsWith('.png'))
+                    .map(href => href.split('/').pop()); // Extract filenames
+
+                // Display the images in the gallery
+                const gallery = document.getElementById('gallery');
+                imageFiles.forEach(filename => {
+                    const img = document.createElement('img');
+                    img.src = baseUrl + filename;
+                    img.alt = filename;
+                    gallery.appendChild(img);
+                });
+            } catch (error) {
+                console.error('Error fetching images:', error);
+            }
+        }
+
+        // Call the function to fetch and display images
+        fetchImages();
+    </script>
+</body>
+</html>
